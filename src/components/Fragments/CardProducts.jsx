@@ -2,38 +2,39 @@ import Button from '../Elements/Button';
 
 const CardProducts = (props) => {
   const { children } = props;
-  return (
-    <div className="grid  ">
-      {/* Product card example */}
-      <div className="bg-white shadow-md rounded-lg p-4 border border-blue-500 ">{children}</div>
-    </div>
-  );
+  return <div className="bg-white shadow-md rounded-lg p-4 border border-blue-500 max-w-xs mx-autoz flex flex-col ">{children}</div>;
 };
 
-const Body = () => {
+const Header = (props) => {
+  const { img } = props;
   return (
-    <a href="#">
-      <h2 className="text-lg font-semibold mb-2">Product Name</h2>
-      <p className="text-m">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repudiandae quia, nulla quos accusantium veritatis?</p>
-    </a>
-  );
-};
-
-const Footer = () => {
-  return (
-    <div>
-      <p className="text-gray-500 mb-4">$99.99</p>
-      <Button classname="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Add to Cart</Button>
-    </div>
-  );
-};
-
-const Header = () => {
-  return (
-    <div>
+    <>
       <a href="#">
-        <img src="/images/trousers_1.jpg" alt="Product Image" className="w-full h-48 object-cover rounded-lg mb-4 border border-blue-500" />
+        <img src={img} alt="Product Image" className="w-full h-32 object-cover rounded-md mb-4 border border-blue-300" />
       </a>
+    </>
+  );
+};
+
+const Body = (props) => {
+  const { children, title } = props;
+  return (
+    <>
+      <a href="#" className="h-full">
+        <h2 className="text-md font-semibold mb-1 text-gray-700">{title}</h2>
+        <p className="text-sm text-gray-500">{children}</p>
+      </a>
+    </>
+  );
+};
+
+const Footer = (props) => {
+  const { price } = props;
+  return (
+    <div className=" mt-4 ">
+      <p className="text-gray-500 mb-2">{price}</p>
+      <Button className="bg-blue-500 text-white text-xs px-3 py-1 rounded hover:bg-blue-600 transition-colors duration-300 mt-auto">Add to Cart</Button>
+      {/* Additional Footer Links */}
     </div>
   );
 };
