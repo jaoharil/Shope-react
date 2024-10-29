@@ -2,7 +2,7 @@ import Button from '../Elements/Button';
 
 const CardProducts = (props) => {
   const { children } = props;
-  return <div className="bg-white shadow-md rounded-lg p-4 border border-blue-500 max-w-xs mx-autoz flex flex-col ">{children}</div>;
+  return <div className="bg-white shadow-md rounded-lg p-4 border my-2 mx-4 border-blue-500 max-w-xs mx-autoz flex flex-col ">{children}</div>;
 };
 
 const Header = (props) => {
@@ -29,11 +29,13 @@ const Body = (props) => {
 };
 
 const Footer = (props) => {
-  const { price } = props;
+  const { price, handleAddToCart, id } = props;
   return (
     <div className=" mt-4 ">
-      <p className="text-gray-500 mb-2">{price}</p>
-      <Button className="bg-blue-500 text-white text-xs px-3 py-1 rounded hover:bg-blue-600 transition-colors duration-300 mt-auto">Add to Cart</Button>
+      <p className="text-gray-500 mb-2">${price}</p>
+      <Button className="bg-blue-500 text-white text-xs px-3 py-1 rounded hover:bg-blue-600 transition-colors duration-300 mt-auto" onClick={() => handleAddToCart(id)}>
+        Add to Cart
+      </Button>
       {/* Additional Footer Links */}
     </div>
   );
