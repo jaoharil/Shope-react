@@ -1,6 +1,5 @@
-import React from 'react';
 import CardProducts from '../components/Fragments/CardProducts';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const products = [
   {
@@ -30,21 +29,40 @@ const email = localStorage.getItem('email');
 
 const ProductsPage = () => {
   // nilai untuk menampilkan cart
-  const [cart, setCart] = useState([
-    {
-      id: 1,
-      qty: 1,
-    },
-  ]);
+  const [cart, setCart] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+
+  // component didmount
+  useEffect(() => {
+    setCart(
+      // pasring data dari local storage
+      JSON.parse(localStorage.getItem('cart')) || []
+    );
+  }, []);
+
+  // membuat perubahan pada cart
+  useEffect(() => {
+    // jika di cart ada data maka
+    if (cart.length > 0) {
+      //baru  menjumlakan data price nya
+      const sum = cart.reduce((acc, item) => {
+        const product = products.find((product) => item.id === item.id);
+        return acc + product.price * item.qty;
+      }, 0);
+      setTotalPrice(sum);
+      // menyimpan data cart ke dalam local storage
+      localStorage.setItem('cart', JSON.stringify(cart));
+    }
+  }, [cart]);
+
   // untuk menghendel button add to cart
   const handleAddToCart = (id) => {
-    setCart([
-      ...cart,
-      {
-        id,
-        qty: 1,
-      },
-    ]);
+    if (cart.find((item) => item.id === id)) {
+      // menambah 1 jika id product yang sama di dalam cart
+      setCart(cart.map((item) => (item.id === id ? { ...item, qty: item.qty + 1 } : item)));
+    } else {
+      setCart([...cart, { id, qty: 1 }]);
+    }
   };
 
   // untuk menghendel button logout
@@ -86,10 +104,12 @@ const ProductsPage = () => {
             <h1 className="text-3xl font-bold text-blue-500 border border-blue-300 px-2 ml-2 mb-2">Cart</h1>
             <table className="text-left table-auto border-separate border-spacing-x-5">
               <thead>
-                <th>Product</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Total</th>
+                <tr>
+                  <th>Product</th>
+                  <th>Price</th>
+                  <th>Quantity</th>
+                  <th>Total</th>
+                </tr>
               </thead>
               <tbody>
                 {cart.map((item) => {
@@ -103,6 +123,14 @@ const ProductsPage = () => {
                     </tr>
                   );
                 })}
+                <tr>
+                  <td colSpan={3}>
+                    <b>Total Price</b>
+                  </td>
+                  <td>
+                    <b>${totalPrice}</b>
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
