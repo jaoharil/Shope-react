@@ -1,29 +1,6 @@
 import CardProducts from '../components/Fragments/CardProducts';
 import { useState, useEffect } from 'react';
-
-const products = [
-  {
-    id: 1,
-    title: 'Lejing Trousers',
-    price: 100,
-    image: '/images/trousers_1.jpg',
-    description: 'Lejing trousers are suitable for those of you who love long legs, especially those of you who like to eat giraffe',
-  },
-  {
-    id: 2,
-    title: 'Dress',
-    price: 150,
-    image: '/images/dress_1.jpg',
-    description: 'This shirt is suitable for those of you who are women',
-  },
-  {
-    id: 3,
-    title: 'Dress',
-    price: 150,
-    image: '/images/dress_1.jpg',
-    description: 'This shirt is suitable for those of you who are women',
-  },
-];
+import { getProducts } from '../services/product.services';
 
 const email = localStorage.getItem('email');
 
@@ -31,6 +8,7 @@ const ProductsPage = () => {
   // nilai untuk menampilkan cart
   const [cart, setCart] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [products, setProducts] = useState([]);
 
   // component didmount
   useEffect(() => {
@@ -40,10 +18,17 @@ const ProductsPage = () => {
     );
   }, []);
 
+  // data api
+  useEffect(() => {
+    getProducts((data) => {
+      setProducts(data);
+    });
+  }, []);
+
   // membuat perubahan pada cart
   useEffect(() => {
     // jika di cart ada data maka
-    if (cart.length > 0) {
+    if (products.length > 0 && cart.length > 0) {
       //baru  menjumlakan data price nya
       const sum = cart.reduce((acc, item) => {
         const product = products.find((product) => item.id === item.id);
@@ -92,13 +77,15 @@ const ProductsPage = () => {
         {/* Product Grid */}
         <div className="flex justify-center py-5 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 ">
           <div className="w-3/4 flex flex-wrap">
-            {products.map((product) => (
-              <CardProducts key={product.id}>
-                <CardProducts.Header img={product.image} />
-                <CardProducts.Body title={product.title} children={product.description} />
-                <CardProducts.Footer price={product.price} id={product.id} handleAddToCart={handleAddToCart} />
-              </CardProducts>
-            ))}
+            {/* mampping kalau data nya ada, jika enggak ada datanya */}
+            {products.length > 0 &&
+              products.map((product) => (
+                <CardProducts key={product.id}>
+                  <CardProducts.Header img={product.image} />
+                  <CardProducts.Body title={product.title} children={product.description} />
+                  <CardProducts.Footer price={product.price} id={product.id} handleAddToCart={handleAddToCart} />
+                </CardProducts>
+              ))}
           </div>
           <div className="w-1/4  border border-blue-400 p-2">
             <h1 className="text-3xl font-bold text-blue-500 border border-blue-300 px-2 ml-2 mb-2">Cart</h1>
@@ -112,17 +99,18 @@ const ProductsPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {cart.map((item) => {
-                  const product = products.find((p) => p.id === item.id);
-                  return (
-                    <tr key={item.id}>
-                      <td>{product.title}</td>
-                      <td>${product.price}</td>
-                      <td>{item.qty}</td>
-                      <td>${item.qty * product.price}</td>
-                    </tr>
-                  );
-                })}
+                {products.length > 0 &&
+                  cart.map((item) => {
+                    const product = products.find((p) => p.id === item.id);
+                    return (
+                      <tr key={item.id}>
+                        <td>{product.title}</td>
+                        <td>${product.price}</td>
+                        <td>{item.qty}</td>
+                        <td>${item.qty * product.price}</td>
+                      </tr>
+                    );
+                  })}
                 <tr>
                   <td colSpan={3}>
                     <b>Total Price</b>
