@@ -7,11 +7,13 @@ import LoginPage from './Pages/login.jsx';
 import RegisterPage from './Pages/register.jsx';
 import ErrorPage from './Pages/404.jsx';
 import ProductsPage from './Pages/products.jsx';
+import Home from './Pages/home.jsx';
+import DetaileProductPage from './Pages/detaileProduct.jsx';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <div>Hello Word</div>,
+    element: <Home />,
     errorElement: <ErrorPage />,
   },
   {
@@ -25,6 +27,10 @@ const router = createBrowserRouter([
   {
     path: '/products',
     element: <ProductsPage />,
+  },
+  {
+    path: '/product/:id',
+    element: <DetaileProductPage />,
   },
 ]);
 

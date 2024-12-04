@@ -38,7 +38,7 @@ const ProductsPage = () => {
       // menyimpan data cart ke dalam local storage
       localStorage.setItem('cart', JSON.stringify(cart));
     }
-  }, [cart]);
+  }, [cart, products]);
 
   // untuk menghendel button add to cart
   const handleAddToCart = (id) => {
@@ -81,7 +81,7 @@ const ProductsPage = () => {
             {products.length > 0 &&
               products.map((product) => (
                 <CardProducts key={product.id}>
-                  <CardProducts.Header img={product.image} />
+                  <CardProducts.Header img={product.image} id={product.id} />
                   <CardProducts.Body title={product.title} children={product.description} />
                   <CardProducts.Footer price={product.price} id={product.id} handleAddToCart={handleAddToCart} />
                 </CardProducts>
